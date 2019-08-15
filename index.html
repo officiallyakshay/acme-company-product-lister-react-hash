@@ -10,33 +10,15 @@
         const { render } = ReactDOM;
         const { createElement, Component } = React;
 
-
-
-        const loadData = async() => {
-          const urls = [
-         'https://acme-users-api-rev.herokuapp.com/api/companies',
-         'https://acme-users-api-rev.herokuapp.com/api/products',
-          ];
-          const responses = await Promise.all(urls.map(url => axios.get(url)));
-          const [companies, products] = responses.map(response => response.data);
-
-
-
-
-
-        }
-        loadData();
-
         const nav = () => { // this is for the navigation links
           return createElement( 'div', null,
           //{className: 'nav'},
           React.createElement('a', {href: '#companies'}, 'Companies'),
           React.createElement('a', {href : '#products'}, 'Products')
           )
-
         }
-        nav();
-/*
+
+        /*
         const renderProducts = (dataArr) => { // render bullet points
           const list = dataArr.map(obj => createElement( 'li', {key:id}, `${obj.name} - ${obj.description}`));
 
@@ -53,21 +35,36 @@
           }
 
           componentDidMount(){
+
+            const urls = [
+              'https://acme-users-api-rev.herokuapp.com/api/companies',
+              'https://acme-users-api-rev.herokuapp.com/api/products',
+                ];
+                const responses = Promise.all(urls.map(url => axios.get(url)));
+                const [companies, products] = responses.map(response => response.data);
+
             if(!window.location.hashslice(1)){
               window.location.hash = 'products';
             } //Products will be the default data loaded
 
+            window.addEventListener('hashchange', (ev)=> {
+              const page = window.location.hashslice(1);
+              this.setState({page});
+            })// end of Window Event Listener
 
+            setTimeout( ()=>{
 
+            }) //end of setTimeout
 
           } // end of component Did Mount
 
+          render(){
+
+          } // end of render
 
 
-          render() {
-
-          }
-        }
+        } // end of app
+        const root = document.querySelector('#root');
 
 
       </script>
