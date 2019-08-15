@@ -12,16 +12,20 @@
 
 
 
-        const loadData = async () => {
-          const response = await Promise.all([
-            await axios.get(`https://acme-users-api-rev.herokuapp.com/api/companies`),
-            await axios.get(`https://acme-users-api-rev.herokuapp.com/api/products`)
-          ]);
+        const loadData = async() => {
+          const urls = [
+         'https://acme-users-api-rev.herokuapp.com/api/companies',
+         'https://acme-users-api-rev.herokuapp.com/api/products',
+          ];
+          const responses = await Promise.all(urls.map(url => axios.get(url)));
+          const [companies, products] = responses.map(response => response.data);
+          console.log(products);
         }
+        loadData();
 
         const nav = () => { // this is for the navigation links
           return createElement( 'div', null,
-          {className: 'nav'},
+          //{className: 'nav'},
           React.createElement('a', {href: '#companies'}, 'Companies'),
           React.createElement('a', {href : '#products'}, 'Products')
           )
