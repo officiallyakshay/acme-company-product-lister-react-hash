@@ -9,13 +9,26 @@
       <script>
         const { render } = ReactDOM;
         const { createElement, Component } = React;
-
+        
         const loadData = async () => {
           const response = await Promise.all([
-          fetch(`https://acme-users-api-rev.herokuapp.com/api/companies`),
-          fetch(`https://acme-users-api-rev.herokuapp.com/api/products`)
+            await axios.get(`https://acme-users-api-rev.herokuapp.com/api/companies`),
+            await axios.get(`https://acme-users-api-rev.herokuapp.com/api/products`)
           ]);
         }
+        
+        class App extends Component {
+          constructor() {
+            super();
+            this.state = {
+
+            }
+          }
+          render() {
+
+          }
+        }
+        
 
       </script>
     </body>
