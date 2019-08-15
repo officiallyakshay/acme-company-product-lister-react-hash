@@ -10,7 +10,7 @@
         const { render } = ReactDOM;
         const { createElement, Component } = React;
 
-        const nav = () => { // this is for the navigation links
+        const Nav = () => { // this is for the navigation links
           return createElement( 'div', null,
           //{className: 'nav'},
           React.createElement('a', {href: '#companies'}, 'Companies'),
@@ -18,12 +18,18 @@
           )
         }
 
-        /*
-        const renderProducts = (dataArr) => { // render bullet points
-          const list = dataArr.map(obj => createElement( 'li', {key:id}, `${obj.name} - ${obj.description}`));
+
+        const Products = (products) => { // render bullet points
+          const list = products.map(product => createElement( 'li', {key:id}, `${product.name} - ${product.description}`));
 
           return createElement('ul', null, list);
-        };*/
+        };
+
+        const Companies = (companies) => { // render bullet points
+          const list = companies.map(company => createElement( 'li', {key:id}, `${company.name} - ${company.description}`));
+
+          return createElement('ul', null, list);
+        };
 
         class App extends Component {
           constructor() {
@@ -59,12 +65,31 @@
           } // end of component Did Mount
 
           render(){
+            const { companies, products, page} = this.state;
+            const nav = createElement(Nav, {companies, products,page});
+
+            let currentView;
+
+            if(page === 'products'){
+              currentView = createElement(Products, { products});
+            };
+
+            if(page === 'companies'){
+              currentView = createElement(Companies, { companies});
+            };
+
+            const productsList = createElement(Products, {products});
+
+            const companiesList = createElement(Companies, {companies});
+
+            return createElement('div', null, 'React App', nav, productsList, companiesList );
 
           } // end of render
 
 
         } // end of app
         const root = document.querySelector('#root');
+        render(createElement(App),root);
 
 
       </script>
