@@ -2,12 +2,20 @@
   <head>
       <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
       <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>  
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
     <body>
       <div id='root'></div>
 
       <script>
         const { render } = ReactDOM;
         const { createElement, Component } = React;
+
+        const loadData = async () => {
+          const response = await Promise.all([
+          fetch(`https://acme-users-api-rev.herokuapp.com/api/companies`),
+          fetch(`https://acme-users-api-rev.herokuapp.com/api/products`)
+          ]);
+        }
 
       </script>
     </body>
