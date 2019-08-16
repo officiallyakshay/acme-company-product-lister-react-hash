@@ -25,8 +25,8 @@
       const Nav = ({ companies, products, page }) => { // this is for the navigation links
         return createElement( 'div',
         { className: 'nav' },
-        React.createElement('a', {href : '#products', className : page === 'products' ? 'selected' : ''}, `Products (${products.length})`),
-        React.createElement('a', {href: '#companies', className : page === 'companies' ? 'selected' : ''}, `Companies (${companies.length})`)
+        React.createElement('a', { href : '#products', className : page === 'products' ? 'selected' : '' }, `Products (${products.length})`),
+        React.createElement('a', { href : '#companies', className : page === 'companies' ? 'selected' : '' }, `Companies (${companies.length})`)
         );
       };
       const Products = ({ products }) => { // render bullet points
@@ -42,32 +42,14 @@
         constructor() {
           super();
           this.state = {
-            companies:[],
-            products:[],
+            products: [],
+            companies: [],
             page: window.location.hash.slice(1)
           };
         }
 
         componentDidMount(){
-
-          setTimeout( async () => {
-              const urls = [
-                'https://acme-users-api-rev.herokuapp.com/api/companies',
-                'https://acme-users-api-rev.herokuapp.com/api/products',
-              ];
-            const responses = await Promise.all(urls.map(url => axios.get(url)));
-            const [companies, products] = responses.map(response => response.data);
-            // if (window.location.hash.slice(1) === 'products') {
-              const product = [{ id: products.id, name: products.name }];
-              this.setState( { products } );
-            // } 
-            // if (window.location.hash.slice(1) === 'companies') {
-              const company = [{ id: companies.id, name: companies.name }];
-              this.setState( { companies } );
-            // }
-            this.setState( { products, companies } );
-          }, 500); //end of setTimeout
-
+          
           if ( !window.location.hash.slice(1) ) {
             window.location.hash = 'products';
           } //Products will be the default data loaded
@@ -75,8 +57,28 @@
           window.addEventListener('hashchange', (ev) => {
             const page = window.location.hash.slice(1);
             this.setState({ page });
-          }); // end of Window Event Listener
+      
+            setTimeout( async () => {
+              
+                const urls = [
+                  'https://acme-users-api-rev.herokuapp.com/api/companies',
+                  'https://acme-users-api-rev.herokuapp.com/api/products',
+                ];
 
+              const responses = await Promise.all(urls.map(url => axios.get(url)));
+              const [companies, products] = responses.map(response => response.data);
+              
+              if (window.location.hash.slice(1) === 'products') {
+                const product = [{ id: products.id, name: products.name }];
+                this.setState( { products } );
+              } 
+              if (window.location.hash.slice(1) === 'companies') {
+                const company = [{ id: companies.id, name: companies.name }];
+                this.setState( { companies } );
+              }
+            }); //end of setTimeout
+
+          });// end of Window Event Listener
 
         } // end of component Did Mount
         render() {
@@ -86,16 +88,14 @@
           let currentView;
           
           if ( page === 'products' ) {
-            currentView = createElement( Products, { products });
+            currentView = createElement( Products, { products } );
           };
 
           if ( page === 'companies' ) {
-            currentView = createElement( Companies, { companies });
+            currentView = createElement( Companies, { companies } );
           };
 
-          const productsList = createElement( Products, { products });
-          const companiesList = createElement( Companies, { companies });
-          return createElement('div', null, 'React App', nav, productsList, companiesList );
+          return createElement('div', null, 'React App', nav, currentView );
         } // end of render
       } // end of app
       const root = document.querySelector('#root');
