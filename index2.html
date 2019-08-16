@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+  </head>
+  <body>
+
+    <div id='root'></div>
+
+    <script>
+      const { render } = ReactDOM;
+      const { Component, createElement } = React;
+
+      // const urls = [
+      //         'https://acme-users-api-rev.herokuapp.com/api/companies',
+      //         'https://acme-users-api-rev.herokuapp.com/api/products',
+      //       ];
+      // const responses = Promise.all(urls.map(url => axios.get(url)));
+      // const [companies, products] = responses.map(response => response.data);
+
+      class App extends Component {
+        constructor() {
+          super();
+          this.state = {
+
+          }
+        }
+        componentDidMount() {
+
+        }
+
+        render() {
+          const { companies, products, view } = this.state;
+          const nav = React.createElement(Nav, { companies, products, view });
+          let chosenView;
+          if (view === 'companies') {
+            chosenView = React.createElement(CompanyList, { companies });
+          }
+          if (view === 'companies') {
+            chosenView = React.createElement(ProductList, { products });
+          }
+          return React.createElement('div', null, nav, chosenView);
+        }
+      }
+
+      const root = document.querySelector('#root');
+      render(createElement(App), root);
+    </script>
+  </body>
+</html>
