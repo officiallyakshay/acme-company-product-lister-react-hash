@@ -3,6 +3,17 @@
       <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
       <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+
+      <style>
+      .nav {
+        display: flex;
+        justify-content: space-around;
+      }
+
+
+      </style>
+
+    </head>
     <body>
       <div id='root'></div>
 
@@ -19,13 +30,13 @@
         }
 
 
-        const Products = (products) => { // render bullet points
+        const Products = ({products}) => { // render bullet points
           const list = products.map(product => createElement( 'li', {key:id}, `${product.name} - ${product.description}`));
 
           return createElement('ul', null, list);
         };
 
-        const Companies = (companies) => { // render bullet points
+        const Companies = ({companies}) => { // render bullet points
           const list = companies.map(company => createElement( 'li', {key:id}, `${company.name} - ${company.description}`));
 
           return createElement('ul', null, list);
@@ -41,20 +52,20 @@
           }
 
           componentDidMount(){
-
+            const loadData = async()=>{
             const urls = [
               'https://acme-users-api-rev.herokuapp.com/api/companies',
               'https://acme-users-api-rev.herokuapp.com/api/products',
                 ];
-                const responses = Promise.all(urls.map(url => axios.get(url)));
+                const responses = await Promise.all(urls.map(url => axios.get(url)));
                 const [companies, products] = responses.map(response => response.data);
-
-            if(!window.location.hashslice(1)){
+              }
+            if(!window.location.hash.slice(1)){
               window.location.hash = 'products';
             } //Products will be the default data loaded
 
             window.addEventListener('hashchange', (ev)=> {
-              const page = window.location.hashslice(1);
+              const page = window.location.hash.slice(1);
               this.setState({page});
             })// end of Window Event Listener
 
@@ -94,5 +105,5 @@
 
       </script>
     </body>
-  </head>
+
 </html>
