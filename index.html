@@ -57,32 +57,25 @@
           window.addEventListener('hashchange', (ev) => {
             const page = window.location.hash.slice(1);
             this.setState({ page });
-      
-            setTimeout( async () => {
-              
-                const urls = [
-                  'https://acme-users-api-rev.herokuapp.com/api/companies',
-                  'https://acme-users-api-rev.herokuapp.com/api/products',
-                ];
-
-              const responses = await Promise.all(urls.map(url => axios.get(url)));
-              const [companies, products] = responses.map(response => response.data);
-              
-              if (window.location.hash.slice(1) === 'products') {
-                const product = [{ id: products.id, name: products.name }];
-                this.setState( { products } );
-              } 
-              if (window.location.hash.slice(1) === 'companies') {
-                const company = [{ id: companies.id, name: companies.name }];
-                this.setState( { companies } );
-              }
-            }); //end of setTimeout
-
           });// end of Window Event Listener
+          
+          setTimeout( async () => {
+              
+              const urls = [
+                'https://acme-users-api-rev.herokuapp.com/api/companies',
+                'https://acme-users-api-rev.herokuapp.com/api/products',
+              ];
+
+            const responses = await Promise.all(urls.map(url => axios.get(url)));
+            const [companies, products] = responses.map(response => response.data);
+            const product = [{ id: products.id, name: products.name }];
+            const company = [{ id: companies.id, name: companies.name }];
+            this.setState( { products, companies } );
+          }); //end of setTimeout
 
         } // end of component Did Mount
         render() {
-
+          
           const { companies, products, page } = this.state;
           const nav = createElement(Nav, { companies, products, page });
           let currentView;
@@ -90,13 +83,14 @@
           if ( page === 'products' ) {
             currentView = createElement( Products, { products } );
           };
-
           if ( page === 'companies' ) {
             currentView = createElement( Companies, { companies } );
           };
 
           return createElement('div', null, 'React App', nav, currentView );
+
         } // end of render
+
       } // end of app
       const root = document.querySelector('#root');
       render(createElement( App ), root);
